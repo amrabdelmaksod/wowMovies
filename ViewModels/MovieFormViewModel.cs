@@ -15,6 +15,7 @@ namespace wowMovies.ViewModels
         [Range(1,10)]
         public double Rate { get; set; }
         [Required, StringLength(2500)]
+        [Display (Name ="Story Line")]
         public string StoryLine { get; set; }
       
         [Display(Name ="Select Poster")]

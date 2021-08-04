@@ -9,7 +9,7 @@
 
 <hr />
 
-<section class="row">
+<section class="row justify-content-between">
     <div class="col-md-4">
         <form method="post" asp-action="Create">
             <div class="form-group">
@@ -65,4 +65,32 @@
             </a>
         </form>
     </div>
+
+    <div class="col-md-4">
+
+        <div id="poster-container" class="d-none">
+            <img src="" alt="Poster" class="img-thumbnail"/>
+        </div>
+    </div>
 </section>
+
+@section Scripts{
+
+             @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+                <script>
+                    $(document).ready(function () {
+                        $('#Poster').on('change', function () {
+                            var selectedFile = $(this).val().split('\\').pop();
+                            $(this).siblings('label').text(selectedFile);
+
+
+                            var posterContainer = $('#poster-container')
+
+                            var image = window.URL.createObjectURL(this.files[0]);
+                            posterContainer.removeClass('d-none');
+                            posterContainer.find('img').attr('src', image);
+                        });
+
+                    });
+                </script>
+            }

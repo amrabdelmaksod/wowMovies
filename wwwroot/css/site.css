@@ -91,3 +91,8 @@ input[type=number]{
 
     -moz-appearance: textfield;
 }
+
+
+.field-validation-error{
+    font-size:14px;
+}

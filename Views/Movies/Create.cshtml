@@ -91,6 +91,17 @@
                             posterContainer.find('img').attr('src', image);
                         });
 
+                        $('#Year').datepicker({
+                            format: 'yyyy',
+                            viewMode: 'years',
+                            minViewMode: 'years',
+                            autoclose: true,
+                            startDate: new Date('1950-01-01'),
+                            endDate: new Date()
+
+
+                        });
+
                     });
                 </script>
             }

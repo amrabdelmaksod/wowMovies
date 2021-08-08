@@ -65,8 +65,30 @@ namespace wowMovies.Controllers
                 return View(model);
             }
 
-            model.Genres = await _context.Genres.OrderBy(g => g.Name).ToListAsync();
-            return View(model);
+            if (poster.Length > 1048576)
+            {
+                model.Genres = await _context.Genres.OrderBy(g => g.Name).ToListAsync();
+                ModelState.AddModelError("Poster", "Poster cannot be more than one mega byte!");
+                return View(model);
+            }
+
+            using var dataStream = new MemoryStream();
+            await poster.CopyToAsync(dataStream);
+
+            var movies = new Movie
+            {
+                Title = model.Title,
+                GenreId = model.GenreId,
+                Year = model.Year,
+                Rate = model.Rate,
+                StoryLine = model.StoryLine,
+                Poster = dataStream.ToArray()
+            };
+
+            _context.Movies.Add(movies);
+            _context.SaveChanges();
+          
+            return RedirectToAction(nameof(Index));
 
         }
     }

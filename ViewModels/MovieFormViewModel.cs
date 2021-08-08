@@ -18,7 +18,7 @@ namespace wowMovies.ViewModels
         [Display (Name ="Story Line")]
         public string StoryLine { get; set; }
       
-        [Display(Name ="Select Poster")]
+        //[Display(Name ="Select Poster")]
         public byte[] Poster { get; set; }
 
       [Display(Name = "Genre")]

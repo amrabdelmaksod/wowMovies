@@ -10,7 +10,7 @@ namespace wowMovies.Models
     public class Genre
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
+        
         public byte Id { get; set; }
         [Required, MaxLength(100)]
         public string Name { get; set; }

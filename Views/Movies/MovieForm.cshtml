@@ -5,13 +5,14 @@
  }
 
 
-<h2> Create Movie</h2>
+<h2> @(Model.Id>0 ? "Edit" : "Create") Movie</h2>
 
 <hr />
 
 <section class="row justify-content-between">
     <div class="col-md-4">
-        <form method="POST" asp-action="Create" enctype="multipart/form-data">
+        <form method="POST" asp-action="@(Model.Id > 0 ? "Edit" : "Create")" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id"/>
             <div class="form-group">
                 <label class="text-muted" asp-for="Title"></label>
                 <input type="text" class="form-control" asp-for="Title" maxlength="250" />
@@ -68,8 +69,8 @@
 
     <div class="col-md-4">
 
-        <div id="poster-container" class="d-none">
-            <img src="" alt="Poster" class="img-thumbnail"/>
+        <div id="poster-container" class="@(Model.Id>0 ? string.Empty : "d-none")">
+            <img src="@(Model.Id>0? $"data:image/*;base64, {Convert.ToBase64String(Model.Poster)}": string.Empty)" alt="Poster" class="img-thumbnail"/>
         </div>
     </div>
 </section>

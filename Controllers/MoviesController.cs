@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NToastNotify;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,15 +14,17 @@ namespace wowMovies.Controllers
     public class MoviesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IToastNotification _toastNotification;
         private List<string> _allowedExtensions = new List<string> { ".jpg", ".png" };
         private long _maxPosterSize = 1048576;
-    public MoviesController(ApplicationDbContext context)
+    public MoviesController(ApplicationDbContext context, IToastNotification toastNotification)
         {
             _context = context;
+            _toastNotification = toastNotification;
         }
         public async Task<IActionResult> Index()
         {
-            var movies = await _context.Movies.Include(g=>g.Genre).ToListAsync();
+            var movies = await _context.Movies.OrderByDescending(m=>m.Rate).Include(g=>g.Genre).ToListAsync();
             return View(movies);
         }
 
@@ -89,6 +92,8 @@ namespace wowMovies.Controllers
 
             _context.Movies.Add(movies);
             _context.SaveChanges();
+
+            _toastNotification.AddSuccessToastMessage("Movie Added Successfully");
           
             return RedirectToAction(nameof(Index));
 
@@ -164,7 +169,19 @@ namespace wowMovies.Controllers
             movieInDb.StoryLine = model.StoryLine;
 
             _context.SaveChanges();
+
+            _toastNotification.AddSuccessToastMessage("Movie Updated Successfully");
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+                return BadRequest();
+            var movieInDb = await _context.Movies.Include(m => m.Genre).SingleOrDefaultAsync(m => m.Id == id);
+            if (movieInDb == null)
+                return NotFound();
+            return View(movieInDb);
         }
     }
 }

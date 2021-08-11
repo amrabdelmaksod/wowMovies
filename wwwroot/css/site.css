@@ -113,3 +113,7 @@ input[type=number]{
 
     transition: all 0.3s ease-in-out;
 }
+
+.mt-60px{
+    margin-top: 60px;
+}

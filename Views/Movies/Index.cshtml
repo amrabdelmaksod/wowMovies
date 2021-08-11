@@ -59,7 +59,7 @@
                                                 </a>
 
 
-                                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">
+                                                <a href="javascript:;" class="btn btn-danger js-delete" data-id="@item.Id" >
                                                     <i class="bi bi-trash"></i>
                                                     Delete
                                                 </a>
@@ -74,4 +74,57 @@
                 </div>
             }
 </div>
+
+
+@section Scripts{ 
+
+    <script>
+
+
+        $(document).ready(function () {
+            $('.js-delete').on('click', function () {
+                var btn = $(this);
+
+
+                bootbox.confirm({
+                    message: "Are you sure that you need to delete this movie ? ",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-danger'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-outline-primary'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: '/movies/delete/' + btn.data('id'),
+                                success: function () {
+                                    var movieContainer = btn.parents('.col-12');
+                                    movieContainer.addClass('animate__animated animate__zoomOutDown');
+
+                                    setTimeout(function ()
+                                    {
+                                        movieContainer.remove();
+                                    }, 1000);
+                                    toastr.success('Movie Deleted Successfully');
+                                   
+                                },
+                                error: function () {
+                                    toastr.error('Something went wrong');
+                                }
+                            });
+                        }
+                    }
+                });
+
+               
+
+            });
+        });
+    </script>
+} 
 
